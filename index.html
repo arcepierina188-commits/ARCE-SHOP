@@ -211,23 +211,6 @@ function restoreStarter(){
 function exportData(){let b=new Blob([JSON.stringify({products,settings})],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='arce-shop-copia.json';a.click()}
 function importData(e){let f=e.target.files[0],r=new FileReader();r.onload=()=>{try{let d=JSON.parse(r.result);products=d.products;settings=d.settings||settings;localStorage.setItem('arce_products',JSON.stringify(products));localStorage.setItem('arce_settings',JSON.stringify(settings));renderAdmin();renderStore();alert('Catálogo importado ✓')}catch(x){alert('Archivo no válido')}};r.readAsText(f)}
 document.getElementById('footerWa').textContent=settings.wa;renderStore();
-</script>
-<script> // Función para guardar o actualizar productos en Firebase  async function saveProduct() {    
-  const id = document.getElementById('editId').value;    
-  const nuevoProducto = {      
-    name: document.getElementById('name').value.trim(),      
-    price: document.getElementById('price').value.trim(),      
-    fb: document.getElementById('fb').value.trim(),      
-    stock: document.getElementById('stock').value.trim(),      
-    sizes: document.getElementById('sizes').value.trim(),      
-    colors: document.getElementById('colors').value.trim(),      
-    detail: document.getElementById('detail').value.trim(),      
-    photo: typeof currentPhoto !== 'undefined' ? currentPhoto : ''    
-  };
-    if (!nuevoProducto.name) {      
-      alert('Por favor, poné un nombre al producto');      
-      return;   
-    }
     try {      
     if (id) {        
       await window.setDoc(window.doc(window.db, "productos", id), nuevoProducto);      
