@@ -4,7 +4,31 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>ARCE SHOP</title>
-<style>
+<style><!-- Configuración de Firebase para ARCE SHOP -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+  import { getFirestore, collection, getDocs, addDoc, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyCElLtSnDC6IIALOaPCbmcBSxsKVrt_bpI",
+    authDomain: "arceshop-99865.firebaseapp.com",
+    projectId: "arceshop-99865",
+    storageBucket: "arceshop-99865.appspot.com",
+    messagingSenderId: "202498685851",
+    appId: "1:202498685851:web:66cd1b2a4599fb8c813f3e",
+    measurementId: "G-P61NL74VKM"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  window.db = db;
+  window.collection = collection;
+  window.getDocs = getDocs;
+  window.addDoc = addDoc;
+  window.deleteDoc = deleteDoc;
+  window.doc = doc;
+</script>
 *{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:#f6f4f0;color:#161616}
 header{background:#111;color:#fff;padding:15px 18px;position:sticky;top:0;z-index:10}.head{max-width:1150px;margin:auto;display:flex;align-items:center;justify-content:space-between}
 .logo{font-size:23px;font-weight:900;letter-spacing:2px}.gold{color:#c89b43}nav button{background:#272727;color:#fff;border:0;border-radius:6px;padding:10px 12px;margin-left:5px;font-weight:700;cursor:pointer}
