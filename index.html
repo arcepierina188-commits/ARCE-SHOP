@@ -116,7 +116,7 @@ async function loginWithFirebase(){
  if(!email||!pass){setLoginMsg('Completá correo y contraseña.');return;}
  setLoginMsg('Ingresando…');
  try{await auth.signInWithEmailAndPassword(email,pass);}
- catch(e){console.error(e);setLoginMsg('No se pudo ingresar. Revisá el correo y la contraseña de Firebase.');}
+ catch(e){console.error(e);setLoginMsg('ERROR: '+e.code+' — '+e.message);}
 }
 function logoutAdmin(){auth.signOut();showStore()}
 function enterAdmin(){
