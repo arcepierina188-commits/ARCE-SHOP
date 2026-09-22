@@ -212,10 +212,69 @@ function exportData(){let b=new Blob([JSON.stringify({products,settings})],{type
 function importData(e){let f=e.target.files[0],r=new FileReader();r.onload=()=>{try{let d=JSON.parse(r.result);products=d.products;settings=d.settings||settings;localStorage.setItem('arce_products',JSON.stringify(products));localStorage.setItem('arce_settings',JSON.stringify(settings));renderAdmin();renderStore();alert('Catálogo importado ✓')}catch(x){alert('Archivo no válido')}};r.readAsText(f)}
 document.getElementById('footerWa').textContent=settings.wa;renderStore();
 </script>
-<script>  // Función para guardar o actualizar productos directamente en la nube de Firebase  async function saveProduct() {    const id = document.getElementById('editId').value;    const nuevoProducto = {      name: document.getElementById('name').value.trim(),      price: document.getElementById('price').value.trim(),      fb: document.getElementById('fb').value.trim(),      stock: document.getElementById('stock').value.trim(),      sizes: document.getElementById('sizes').value.trim(),      colors: document.getElementById('colors').value.trim(),      detail: document.getElementById('detail').value.trim(),      photo: typeof currentPhoto !== 'undefined' ? currentPhoto : ''    };
-    if (!nuevoProducto.name) {      alert('Por favor, poné un nombre al producto');      return;    }
-    try {      if (id) {        // Si tiene ID, actualiza el producto existente en Firebase        await window.setDoc(window.doc(window.db, "productos", id), nuevoProducto);      } else {        // Si no tiene ID, crea un nuevo producto en Firebase        await window.addDoc(window.collection(window.db, "productos"), nuevoProducto);      }
-      if (typeof clearForm === 'function') clearForm();      if (typeof cargarProductosDesdeNube === 'function') {        cargarProductosDesdeNube();      } else {        location.reload(); // Recarga la página para mostrar los cambios si no encuentra la otra función      }    } catch (error) {      console.error("Error al guardar:", error);      alert("Hubo un error al guardar el producto.");    }  }
-  // Función para eliminar productos de la nube  async function deleteId(id) {    if (confirm("¿Estás segura de eliminar este producto?")) {      try {        await window.deleteDoc(window.doc(window.db, "productos", id));        if (typeof cargarProductosDesdeNube === 'function') {          cargarProductosDesdeNube();        } else {          location.reload();        }      } catch (error) {        console.error("Error al eliminar:", error);      }    }  }
-  // Función para cargar los productos automáticamente al abrir la página  async function cargarProductosDesdeNube() {    try {      const querySnapshot = await window.getDocs(window.collection(window.db, "productos"));      window.products = [];      querySnapshot.forEach((doc) => {        window.products.push({ id: doc.id, ...doc.data() });      });      if (typeof renderStore === 'function') renderStore();      if (typeof renderAdmin === 'function') renderAdmin();    } catch (e) {      console.log("Error al cargar productos:", e);    }  }
-  // Se ejecuta al cargar la página  window.addEventListener('DOMContentLoaded', () => {    cargarProductosDesdeNube();  });</script>
+<script> // Función para guardar o actualizar productos en Firebase  async function saveProduct() {    
+  const id = document.getElementById('editId').value;    
+  const nuevoProducto = {      
+    name: document.getElementById('name').value.trim(),      
+    price: document.getElementById('price').value.trim(),      
+    fb: document.getElementById('fb').value.trim(),      
+    stock: document.getElementById('stock').value.trim(),      
+    sizes: document.getElementById('sizes').value.trim(),      
+    colors: document.getElementById('colors').value.trim(),      
+    detail: document.getElementById('detail').value.trim(),      
+    photo: typeof currentPhoto !== 'undefined' ? currentPhoto : ''    
+  };
+    if (!nuevoProducto.name) {      
+      alert('Por favor, poné un nombre al producto');      
+      return;   
+    }
+    try {      
+    if (id) {        
+      await window.setDoc(window.doc(window.db, "productos", id), nuevoProducto);      
+    } else {        
+      await window.addDoc(window.collection(window.db, "productos"), nuevoProducto);      
+    }
+      if (typeof clearForm === 'function') clearForm();      
+      if (typeof cargarProductosDesdeNube === 'function') {        
+        cargarProductosDesdeNube();      
+      } else {        
+        location.reload();      
+      }    
+    } catch (error) {      
+      console.error("Error al guardar:", error);      
+      alert("Hubo un error al guardar el producto.");   
+    } 
+  }
+  async function deleteId(id) {    
+    if (confirm("¿Estás segura de eliminar este producto?")) {      
+      try {       
+      await window.deleteDoc(window.doc(window.db, "productos", id));       
+        if (typeof cargarProductosDesdeNube === 'function') {          
+          cargarProductosDesdeNube();        
+        } else {          
+          location.reload();        
+        }      
+      } catch (error) {        
+        console.error("Error al eliminar:", error);     
+      }   
+    }  
+  }
+  async function cargarProductosDesdeNube() {   
+    try {      
+      const querySnapshot = await window.getDocs(window.collection(window.db, "productos"));     
+      window.products = [];     
+      querySnapshot.forEach((doc) => {       
+        window.products.push({ id: doc.id, ...doc.data() });      
+      });     
+      if (typeof renderStore === 'function') renderStore();      
+      if (typeof renderAdmin === 'function') renderAdmin();   
+    } catch (e) {      
+      console.log("Error al cargar productos:", e);   
+    } 
+  }
+  window.addEventListener('DOMContentLoaded', () => {  
+    cargarProductosDesdeNube(); 
+  });
+</script>
+</body>
+</html>
