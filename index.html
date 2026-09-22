@@ -209,39 +209,8 @@ function restoreStarter(){
   renderStore();renderAdmin();alert('Catálogo original restaurado.');
 }
 function exportData(){let b=new Blob([JSON.stringify({products,settings})],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='arce-shop-copia.json';a.click()}
-function importData(e){let f=e.target.files[0],r=new FileReader();r.onload=()=>{try{let d=JSON.parse(r.result);products=d.products;settings=d.settings||settings;localStorage.setItem('arce_products',JSON.stringify(products));localStorage.setItem('arce_settings',JSON.stringify(settings));renderAdmin();renderStore();alert('Catálogo importado ✓')}catch(x){alert('Archivo no válido')}};r.readAsText(f)}
-document.getElementById('footerWa').textContent=settings.wa;renderStore();
-    try {      
-    if (id) {        
-      await window.setDoc(window.doc(window.db, "productos", id), nuevoProducto);      
-    } else {        
-      await window.addDoc(window.collection(window.db, "productos"), nuevoProducto);      
-    }
-      if (typeof clearForm === 'function') clearForm();      
-      if (typeof cargarProductosDesdeNube === 'function') {        
-        cargarProductosDesdeNube();      
-      } else {        
-        location.reload();      
-      }    
-    } catch (error) {      
-      console.error("Error al guardar:", error);      
-      alert("Hubo un error al guardar el producto.");   
-    } 
-  }
-  async function deleteId(id) {    
-    if (confirm("¿Estás segura de eliminar este producto?")) {      
-      try {       
-      await window.deleteDoc(window.doc(window.db, "productos", id));       
-        if (typeof cargarProductosDesdeNube === 'function') {          
-          cargarProductosDesdeNube();        
-        } else {          
-          location.reload();        
-        }      
-      } catch (error) {        
-        console.error("Error al eliminar:", error);     
-      }   
-    }  
-  }
+   
+    
   async function cargarProductosDesdeNube() {   
     try {      
       const querySnapshot = await window.getDocs(window.collection(window.db, "productos"));     
