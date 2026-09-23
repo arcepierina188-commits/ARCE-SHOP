@@ -1,26 +1,205 @@
-<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>ARCE SHOP</title><style>*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:#f6f4f0;color:#161616}header{background:#111;color:#fff;padding:15px 18px;position:sticky;top:0;z-index:10}.head{max-width:1150px;margin:auto;display:flex;align-items:center;justify-content:space-between}.logo{font-size:23px;font-weight:900;letter-spacing:2px}.gold{color:#c89b43}nav button{background:#272727;color:#fff;border:0;border-radius:6px;padding:10px 12px;margin-left:5px;font-weight:700;cursor:pointer}main{max-width:1150px;margin:auto;padding:25px 15px}.hero{background:linear-gradient(115deg,#111,#3a2f21);color:#fff;border-radius:17px;padding:55px 28px;margin-bottom:30px}.hero h1{font-size:clamp(40px,7vw,70px);line-height:.95;margin:15px 0}.hero p{color:#ddd;max-width:600px;line-height:1.6}.btn{border:0;background:#c89b43;color:#111;padding:12px 17px;border-radius:7px;font-weight:900;cursor:pointer}.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:17px}.card{background:#fff;border:1px solid #e5e2dc;border-radius:13px;overflow:hidden}.card img{width:100%;height:245px;object-fit:cover;background:#eee}.body{padding:14px}.tag{font-size:10px;color:#a27628;font-weight:900;text-transform:uppercase}.card h3{font-size:17px;margin:7px 0}.price{font-size:19px;font-weight:900}.ml{font-size:12px;color:#777;margin-top:4px}.buy{width:100%;background:#111;color:#fff;border:0;border-radius:6px;padding:11px;margin-top:12px;font-weight:800;cursor:pointer}.admin{display:none}.admin.on{display:block}.store.off{display:none}.panel{background:#fff;border:1px solid #e2dfd8;border-radius:13px;padding:20px;margin:18px 0}.form{display:grid;grid-template-columns:1fr 1fr;gap:12px}label{font-size:12px;font-weight:800;display:block;margin-bottom:5px}input,select,textarea{width:100%;padding:11px;border:1px solid #ccc;border-radius:7px}.preview{width:90px;height:90px;object-fit:cover;border-radius:8px;background:#eee}.note{background:#fff7dc;border:1px solid #ead69e;padding:12px;border-radius:8px;font-size:13px;line-height:1.5}table{width:100%;border-collapse:collapse;margin-top:15px}th,td{padding:9px;border-bottom:1px solid #eee;text-align:left;font-size:13px}td img{width:55px;height:55px;object-fit:cover;border-radius:6px}.actions button{border:0;border-radius:5px;padding:7px;margin:2px;cursor:pointer}.badge{display:inline-block;padding:5px 8px;border-radius:20px;background:#eee;font-size:11px;font-weight:bold}.stockok{background:#e7f4e8}.stockno{background:#f8dddd}.filters{display:flex;gap:8px;flex-wrap:wrap;margin:15px 0}.filters button{border:1px solid #ccc;background:white;border-radius:20px;padding:8px 13px;cursor:pointer}.login{position:fixed;inset:0;background:rgba(0,0,0,.72);display:flex;align-items:center;justify-content:center;z-index:100}.loginbox{background:white;border-radius:15px;padding:25px;width:min(90%,380px);box-shadow:0 15px 50px #000}.loginbox h2{margin-top:0}footer{background:#111;color:#aaa;text-align:center;padding:28px;margin-top:35px}@media(max-width:800px){.grid{grid-template-columns:repeat(2,1fr)}.form{grid-template-columns:1fr}}@media(max-width:480px){.grid{gap:10px}.card img{height:200px}.hero{padding:40px 20px}main{padding:18px 10px}.logo{font-size:19px}nav button{padding:8px}}</style>
-<!-- Firebase SDKs --><script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script><script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script><script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script></head><body>
-<div id="login" class="login" style="display:none"> <div class="loginbox">  <h2> Administradora</h2>  <p>Ingresá el correo y la contraseña de tu cuenta de Firebase.</p>  <input id="adminEmail" type="email" placeholder="Correo electrónico" autocomplete="username">  <input id="adminPassword" type="password" placeholder="Contraseña" autocomplete="current-password" style="margin-top:8px">  <button id="loginBtn" class="btn" style="width:100%;margin-top:12px" onclick="loginWithFirebase()">Entrar</button>  <button type="button" style="width:100%;margin-top:8px;background:#eee;border:0;padding:10px;border-radius:8px;cursor:pointer" onclick="showStore()">Volver a la tienda</button>  <small id="loginMsg" style="display:block;margin-top:10px;color:#d9534f;font-weight:bold;"></small> </div></div>
-<header> <div class="head">  <div class="logo">ARCE <span class="gold">SHOP</span></div>  <nav>   <button onclick="showStore()">Tienda</button>   <button onclick="showAdminModal()"> Administrar</button>  </nav> </div></header>
-<main><div id="store" class="store"> <section class="hero">  <div class="gold">PERFUMERÍA & SPORT</div>  <h1>Tu aroma.<br>Tu estilo.</h1>  <p>Perfumes árabes y ropa deportiva. Elegí tu producto y consultá directamente por WhatsApp.</p>  <button class="btn" onclick="document.getElementById('catalog').scrollIntoView()">Ver productos</button> </section> <div class="filters">  <button onclick="filterCat('Todos')">Todos</button>  <button onclick="filterCat('Perfumes árabes')">Perfumes</button>  <button onclick="filterCat('Ropa deportiva')">Ropa deportiva</button> </div> <div id="catalog" class="grid"></div></div>
-<div id="admin" class="admin"> <h1> Administrar ARCE SHOP</h1> <div class="note"><b>Tu zona de administración.</b> Podés agregar, editar y eliminar productos, controlar stock, talles y colores.</div>
- <div class="panel">  <h2> Datos de contacto</h2>  <div class="form">   <div><label>WhatsApp</label><input id="wa"></div>   <div><label>Instagram</label><input id="ig"></div>  </div><br>  <button class="btn" onclick="saveSettings()">Guardar</button> </div>
- <div class="panel">  <h2 id="formTitle"> Agregar producto</h2>  <input id="editId" type="hidden">  <div class="form">   <div><label>Nombre</label><input id="name" placeholder="Ej.: Lattafa Asad"></div>   <div><label>Categoría</label><select id="category"><option>Perfumes árabes</option><option>Ropa deportiva</option></select></div>   <div><label>Precio Facebook / WhatsApp</label><input id="fb" placeholder="$85.000"></div>   <div><label>Precio Mercado Libre</label><input id="ml" placeholder="$90.000"></div>   <div><label>Stock</label><input id="stock" type="number" min="0" value="1"></div>   <div><label>Talles (ropa)</label><input id="sizes" placeholder="S, M, L, XL"></div>   <div><label>Colores (ropa)</label><input id="colors" placeholder="Negro, blanco, rojo"></div>   <div><label>Detalle</label><input id="detail" placeholder="100 ml · Hombre"></div>   <div><label>Foto</label><input id="file" type="file" accept="image/*" onchange="loadPhoto(event)"></div>  </div><br>  <img id="preview" class="preview"><br><br>  <button class="btn" onclick="saveProduct()">Guardar producto</button>  <button class="btn" style="background:#222;color:#fff" onclick="clearForm()">Nuevo</button> </div>
- <div class="panel">  <h2> Medios de pago</h2>  <p>En tu tienda podés informar:</p>  <span class="badge"> Efectivo</span> <span class="badge"> Débito</span> <span class="badge"> Crédito</span> </div>
- <div class="panel">  <h2> Mis productos</h2>  <div style="overflow:auto">   <table>    <thead>     <tr><th>Foto</th><th>Producto</th><th>Stock</th><th>FB/WhatsApp</th><th>Mercado Libre</th><th>Acciones</th></tr>    </thead>    <tbody id="rows"></tbody>   </table>  </div> </div></div></main>
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ARCE SHOP</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:#f6f4f0;color:#161616}
+header{background:#111;color:#fff;padding:15px 18px;position:sticky;top:0;z-index:10}.head{max-width:1150px;margin:auto;display:flex;align-items:center;justify-content:space-between}.logo{font-size:23px;font-weight:900;letter-spacing:2px}.gold{color:#c89b43}nav button{background:#272727;color:#fff;border:0;border-radius:6px;padding:10px 12px;margin-left:5px;font-weight:700;cursor:pointer}main{max-width:1150px;margin:auto;padding:25px 15px}.hero{background:linear-gradient(115deg,#111,#3a2f21);color:#fff;border-radius:17px;padding:55px 28px;margin-bottom:30px}.hero h1{font-size:clamp(40px,7vw,70px);line-height:.95;margin:15px 0}.hero p{color:#ddd;max-width:600px;line-height:1.6}.btn{border:0;background:#c89b43;color:#111;padding:12px 17px;border-radius:7px;font-weight:900;cursor:pointer}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:17px}.card{background:#fff;border:1px solid #e5e2dc;border-radius:13px;overflow:hidden}.card img{width:100%;height:245px;object-fit:cover;background:#eee}.body{padding:14px}.tag{font-size:10px;color:#a27628;font-weight:900;text-transform:uppercase}.card h3{font-size:17px;margin:7px 0}.price{font-size:19px;font-weight:900}.ml{font-size:12px;color:#777;margin-top:4px}.buy{width:100%;background:#111;color:#fff;border:0;border-radius:6px;padding:11px;margin-top:12px;font-weight:800;cursor:pointer}
+.admin{display:none}.admin.on{display:block}.store.off{display:none}.panel{background:#fff;border:1px solid #e2dfd8;border-radius:13px;padding:20px;margin:18px 0}.form{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+label{font-size:12px;font-weight:800;display:block;margin-bottom:5px}input,select,textarea{width:100%;padding:11px;border:1px solid #ccc;border-radius:7px}.preview{width:90px;height:90px;object-fit:cover;border-radius:8px;background:#eee}
+.note{background:#fff7dc;border:1px solid #ead69e;padding:12px;border-radius:8px;font-size:13px;line-height:1.5}table{width:100%;border-collapse:collapse;margin-top:15px}th,td{padding:9px;border-bottom:1px solid #eee;text-align:left;font-size:13px}td img{width:55px;height:55px;object-fit:cover;border-radius:6px}.actions button{border:0;border-radius:5px;padding:7px;margin:2px;cursor:pointer}
+.badge{display:inline-block;padding:5px 8px;border-radius:20px;background:#eee;font-size:11px;font-weight:bold}.stockok{background:#e7f4e8}.stockno{background:#f8dddd}.filters{display:flex;gap:8px;flex-wrap:wrap;margin:15px 0}.filters button{border:1px solid #ccc;background:white;border-radius:20px;padding:8px 13px;cursor:pointer}
+.login{position:fixed;inset:0;background:rgba(0,0,0,.72);display:flex;align-items:center;justify-content:center;z-index:100}.loginbox{background:white;border-radius:15px;padding:25px;width:min(90%,380px);box-shadow:0 15px 50px #000}.loginbox h2{margin-top:0}
+footer{background:#111;color:#aaa;text-align:center;padding:28px;margin-top:35px}
+@media(max-width:800px){.grid{grid-template-columns:repeat(2,1fr)}.form{grid-template-columns:1fr}}
+@media(max-width:480px){.grid{gap:10px}.card img{height:200px}.hero{padding:40px 20px}main{padding:18px 10px}.logo{font-size:19px}nav button{padding:8px}}
+</style>
+<!-- Firebase SDKs -->
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+</head>
+<body>
+<div id="login" class="login" style="display:none"> 
+<div class="loginbox">  
+<h2> Administradora</h2>  
+<p>Ingresá el correo y la contraseña de tu cuenta de Firebase.</p> 
+<input id="adminEmail" type="email" placeholder="Correo electrónico" autocomplete="username"> 
+<input id="adminPassword" type="password" placeholder="Contraseña" autocomplete="current-password" style="margin-top:8px"> 
+<button id="loginBtn" class="btn" style="width:100%;margin-top:12px" onclick="loginWithFirebase()">Entrar</button>  
+<button type="button" style="width:100%;margin-top:8px;background:#eee;border:0;padding:10px;border-radius:8px;cursor:pointer" onclick="showStore()">Volver a la tienda</button> 
+<small id="loginMsg" style="display:block;margin-top:10px;color:#d9534f;font-weight:bold;"></small>
+</div>
+</div>
+<header> 
+<div class="head"> 
+<div class="logo">ARCE <span class="gold">SHOP</span></div> 
+<nav>   
+<button onclick="showStore()">Tienda</button>  
+<button onclick="showAdminModal()"> Administrar</button>  
+</nav> 
+</div>
+</header>
+<main>
+<div id="store" class="store"> 
+<section class="hero">  
+<div class="gold">PERFUMERÍA & SPORT</div>  
+<h1>Tu aroma.<br>Tu estilo.</h1> 
+<p>Perfumes árabes y ropa deportiva. Elegí tu producto y consultá directamente por WhatsApp.</p> 
+<button class="btn" onclick="document.getElementById('catalog').scrollIntoView()">Ver productos</button> 
+</section> 
+<div class="filters"> 
+<button onclick="filterCat('Todos')">Todos</button>  
+<button onclick="filterCat('Perfumes árabes')">Perfumes</button> 
+<button onclick="filterCat('Ropa deportiva')">Ropa deportiva</button>
+</div> 
+<div id="catalog" class="grid"></div>
+</div>
+<div id="admin" class="admin"> 
+<h1> Administrar ARCE SHOP</h1> 
+<div class="note"><b>Tu zona de administración.</b> Podés agregar, editar y eliminar productos, controlar stock, talles y colores.</div>
+<div class="panel">  
+<h2> Datos de contacto</h2>  
+<div class="form">   
+<div><label>WhatsApp</label><input id="wa"></div>   
+<div><label>Instagram</label><input id="ig"></div> 
+</div><br>  
+<button class="btn" onclick="saveSettings()">Guardar</button> 
+</div>
+<div class="panel">  
+<h2 id="formTitle"> Agregar producto</h2> 
+<input id="editId" type="hidden">  
+<div class="form">   
+<div><label>Nombre</label><input id="name" placeholder="Ej.: Lattafa Asad"></div>   
+<div><label>Categoría</label><select id="category"><option>Perfumes árabes</option><option>Ropa deportiva</option></select></div>   
+<div><label>Precio Facebook / WhatsApp</label><input id="fb" placeholder="$85.000"></div>   
+<div><label>Precio Mercado Libre</label><input id="ml" placeholder="$90.000"></div>   
+<div><label>Stock</label><input id="stock" type="number" min="0" value="1"></div>   
+<div><label>Talles (ropa)</label><input id="sizes" placeholder="S, M, L, XL"></div>   
+<div><label>Colores (ropa)</label><input id="colors" placeholder="Negro, blanco, rojo"></div>   
+<div><label>Detalle</label><input id="detail" placeholder="100 ml · Hombre"></div>   
+<div><label>Foto</label><input id="file" type="file" accept="image/*" onchange="loadPhoto(event)"></div>  
+</div><br>  
+<img id="preview" class="preview"><br><br>  
+<button class="btn" onclick="saveProduct()">Guardar producto</button>  
+<button class="btn" style="background:#222;color:#fff" onclick="clearForm()">Nuevo</button> 
+</div>
+<div class="panel">  
+<h2> Medios de pago</h2>  
+<p>En tu tienda podés informar:</p>  
+<span class="badge"> Efectivo</span> <span class="badge"> Débito</span> <span class="badge"> Crédito</span> 
+</div>
+<div class="panel">  
+<h2> Mis productos</h2>  
+<div style="overflow:auto">   
+<table>    
+<thead>     
+<tr><th>Foto</th><th>Producto</th><th>Stock</th><th>FB/WhatsApp</th><th>Mercado Libre</th><th>Acciones</th></tr>    
+</thead>    
+<tbody id="rows"></tbody>   
+</table>  
+</div> 
+</div>
+</div>
+</main>
 <footer>ARCE SHOP · Mendoza, Argentina · WhatsApp: <span id="footerWa"></span></footer>
-<script>// ==========================================// CONFIGURACIÓN DE FIREBASE (Asegúrate de poner tus datos reales aquí)// ==========================================const firebaseConfig = {    apiKey: "TU_API_KEY_DE_FIREBASE",    authDomain: "tu-proyecto.firebaseapp.com",    projectId: "tu-proyecto",    storageBucket: "tu-proyecto.appspot.com",    messagingSenderId: "TU_SENDER_ID",    appId: "TU_APP_ID"};
-// Inicializar Firebase de manera seguraif (!firebase.apps.length) {    firebase.initializeApp(firebaseConfig);}const auth = firebase.auth();const db = firebase.firestore();
-// Monitorear estado de sesiónauth.onAuthStateChanged((user) => {    if (user) {        document.getElementById('login').style.display = 'none';        document.getElementById('store').classList.add('off');        document.getElementById('admin').classList.add('on');    }});
-function showStore() {    document.getElementById('login').style.display = 'none';    document.getElementById('store').classList.remove('off');    document.getElementById('admin').classList.remove('on');}
-function showAdminModal() {    document.getElementById('login').style.display = 'flex';    document.getElementById('loginMsg').innerText = '';}
-async function loginWithFirebase() {    const emailInput = document.getElementById('adminEmail');    const passwordInput = document.getElementById('adminPassword');    const msgElem = document.getElementById('loginMsg');    const btnElem = document.getElementById('loginBtn');
-    const email = emailInput.value.trim();    const password = passwordInput.value;
-    if (!email || !password) {        msgElem.innerText = "Completá el correo y la contraseña.";        return;    }
-    btnElem.disabled = true;    btnElem.innerText = "Validando...";    msgElem.innerText = "";
-    try {        await auth.signInWithEmailAndPassword(email, password);        document.getElementById('login').style.display = 'none';        document.getElementById('store').classList.add('off');        document.getElementById('admin').classList.add('on');    } catch (error) {        console.error("Error de autenticación:", error);        if (error.code === 'auth/invalid-credential' || error.code === 'auth/wrong-password' || error.code === 'auth/user-not-found') {            msgElem.innerText = "Correo o contraseña incorrectos.";        } else if (error.code === 'auth/network-request-failed') {            msgElem.innerText = "Error de red. Verificá tu conexión.";        } else {            msgElem.innerText = "Error: " + (error.message || "No se pudo conectar.");        }    } finally {        btnElem.disabled = false;        btnElem.innerText = "Entrar";    }}
+<script>
+// ==========================================// CONFIGURACIÓN DE FIREBASE (Asegúrate de poner tus datos reales aquí)// ==========================================
+  const firebaseConfig = {    
+  apiKey: "TU_API_KEY_DE_FIREBASE",    
+  authDomain: "tu-proyecto.firebaseapp.com",    
+  projectId: "tu-proyecto",    
+  storageBucket: "tu-proyecto.appspot.com",    
+  messagingSenderId: "TU_SENDER_ID",    
+  appId: "TU_APP_ID"
+  };
+// Inicializar Firebase de manera segura
+  if (!firebase.apps.length) {    
+  firebase.initializeApp(firebaseConfig);
+  }
+  const auth = firebase.auth();
+  const db = firebase.firestore();
+// Monitorear estado de sesión
+  auth.onAuthStateChanged((user) => {    
+  if (user) {        
+  document.getElementById('login').style.display = 'none';        
+  document.getElementById('store').classList.add('off');        
+  document.getElementById('admin').classList.add('on');   
+  }
+  });
+function showStore() {    
+  document.getElementById('login').style.display = 'none';    
+  document.getElementById('store').classList.remove('off');    
+  document.getElementById('admin').classList.remove('on');
+    }
+function showAdminModal() {    
+  document.getElementById('login').style.display = 'flex';    
+  document.getElementById('loginMsg').innerText = ''; 
+  }
+async function loginWithFirebase() {    
+const emailInput = document.getElementById('adminEmail');    
+const passwordInput = document.getElementById('adminPassword');    
+const msgElem = document.getElementById('loginMsg');    
+const btnElem = document.getElementById('loginBtn');
+const email = emailInput.value.trim();    
+const password = passwordInput.value;
+if (!email || !password) {        
+msgElem.innerText = "Completá el correo y la contraseña.";        
+return;    
+}
+btnElem.disabled = true;   
+btnElem.innerText = "Validando...";    
+msgElem.innerText = "";
+    try {        
+await auth.signInWithEmailAndPassword(email, password);        
+document.getElementById('login').style.display = 'none';        
+document.getElementById('store').classList.add('off');        
+document.getElementById('admin').classList.add('on');   
+} catch (error) {        
+console.error("Error de autenticación:", error);        
+if (error.code === 'auth/invalid-credential' || error.code === 'auth/wrong-password' || error.code === 'auth/user-not-found') {            
+msgElem.innerText = "Correo o contraseña incorrectos.";        
+} else if (error.code === 'auth/network-request-failed') {            
+msgElem.innerText = "Error de red. Verificá tu conexión.";       
+} else {           
+msgElem.innerText = "Error: " + (error.message || "No se pudo conectar.");        
+     }    
+} finally {        
+btnElem.disabled = false;        
+btnElem.innerText = "Entrar";    
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               
+                          }
+                    }
 // Función que faltaba y causaba el error en la consolafunction filterCat(cat) {    console.log("Categoría seleccionada:", cat);    // Aquí puedes añadir la lógica para filtrar los productos en pantalla si lo deseas}
-function clearForm() {    document.getElementById('editId').value = '';    document.getElementById('name').value = '';    document.getElementById('fb').value = '';    document.getElementById('ml').value = '';    document.getElementById('stock').value = '1';    document.getElementById('sizes').value = '';    document.getElementById('colors').value = '';    document.getElementById('detail').value = '';    document.getElementById('preview').src = '';}
-function loadPhoto(event) {    const reader = new FileReader();    reader.onload = function(){        document.getElementById('preview').src = reader.result;    }    if(event.target.files[0]) {        reader.readAsDataURL(event.target.files[0]);    }}
-function saveSettings() {     alert("Datos de contacto guardados."); }
-function saveProduct() {     alert("Producto guardado correctamente.");     clearForm(); }</script></body></html>
+function clearForm() {    
+  document.getElementById('editId').value = '';    
+                      document.getElementById('name').value = '';    
+                      document.getElementById('fb').value = '';    
+                      document.getElementById('ml').value = '';    
+                      document.getElementById('stock').value = '1';    
+                      document.getElementById('sizes').value = '';    
+                      document.getElementById('colors').value = '';    
+                      document.getElementById('detail').value = '';    
+                      document.getElementById('preview').src = '';}
+function loadPhoto(event) {    
+  const reader = new FileReader();    
+                           reader.onload = function(){       
+  document.getElementById('preview').src = reader.result;    
+}    
+  if(event.target.files[0]) {        
+  reader.readAsDataURL(event.target.files[0]);    
+                             }
+                          }
+function saveSettings() {     
+  alert("Datos de contacto guardados."); 
+                        }
+function saveProduct() {     
+  alert("Producto guardado correctamente.");     
+                        clearForm(); 
+}
+</script>
+</body>
+</html>
