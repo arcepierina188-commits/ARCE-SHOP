@@ -160,7 +160,7 @@ function exportData(){let b=new Blob([JSON.stringify({products,settings})],{type
 async function importData(e){let f=e.target.files[0];if(!f)return;let r=new FileReader();r.onload=async()=>{try{let d=JSON.parse(r.result);if(!Array.isArray(d.products))throw new Error('invalid');const batch=db.batch();d.products.forEach(p=>batch.set(db.collection('products').doc(String(p.id)),p));if(d.settings)batch.set(db.collection('settings').doc('main'),d.settings,{merge:true});await batch.commit();products=d.products;settings={...settings,...(d.settings||{})};renderAdmin();renderStore();alert('Catálogo importado ✓')}catch(x){console.error(x);alert('Archivo no válido o no se pudo guardar en Firebase')}};r.readAsText(f)}
 
 // Exponer funciones usadas por botones inline
-Object.assign(window,{showStore,showAdmin,loginWithFirebase,logoutAdmin,filterCat,waMsg,renderStore,renderAdmin,loadPhoto,saveProduct,editProduct,deleteProduct,clearForm,saveSettings,restoreStarter,exportData,importData});
+Object.assign(window,{showStore,showAdmin,loginWithFirebase,logoutAdmin,filterCat,renderStore,renderAdmin,loadPhoto,saveProduct,editProduct,deleteProduct,clearForm,saveSettings,restoreStarter,exportData,importData});
 
 auth.onAuthStateChanged(async user=>{currentUser=user; if(user){await loadCloud();enterAdmin();}else{if(!dataLoaded)await loadCloud();showStore();}});
 document.getElementById('footerWa').textContent=settings.wa;renderStore();
