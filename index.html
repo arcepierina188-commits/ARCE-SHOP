@@ -320,7 +320,19 @@ async function deleteProduct(id) {
         }
     }
 }
-
+// Función para leer y mostrar la foto seleccionada
+    function loadPhoto(event) {
+        const reader = new FileReader();
+        reader.onload = function() {
+            const preview = document.getElementById('preview');
+            if (preview) {
+                preview.src = reader.result;
+            }
+        };
+        if (event.target.files[0]) {
+            reader.readAsDataURL(event.target.files[0]);
+        }
+    }
 // Cargar los productos automáticamente al abrir la página
 window.onload = function() {
     loadProducts();
