@@ -242,33 +242,54 @@ async function saveProduct() {
 // Cargar productos desde Firebase para mostrarlos en la tienda y administración
 function loadProducts() {
     const rows = document.getElementById('rows');
-    if (!rows) return;
-
+    
     db.collection('products').orderBy('createdAt', 'desc').get().then((querySnapshot) => {
-        rows.innerHTML = "";
+        if (rows) rows.innerHTML = "";
+        
+        const storeGrid = document.querySelector('main .grid') || document.querySelector('.grid');
+        let publicContent = "";
+        let adminContent = "";
+
         querySnapshot.forEach((doc) => {
             const product = doc.data();
             const id = doc.id;
 
-            rows.innerHTML += `
-                <tr>
-                    <td><img src="${product.preview || ''}" width="45" style="border-radius:5px; object-fit:cover;"></td>
-                    <td><strong>${product.name}</strong><br><small>${product.category}</small></td>
-                    <td>${product.stock}</td>
-                    <td>${product.fb || '-'}</td>
-                    <td>${product.ml || '-'}</td>
-                    <td>
-                        <button class="btn" style="background:#f0ad4e; padding:4px 8px; font-size:12px; margin-right:4px;" onclick="prepareEdit('${id}', '${product.name.replace(/'/g, "\\'")}', '${product.category}', '${product.fb}', '${product.ml}', '${product.stock}', '${product.sizes}', '${product.colors}', '${product.detail}', '${product.preview}')">Editar</button>
-                        <button class="btn" style="background:#d9534f; padding:4px 8px; font-size:12px;" onclick="deleteProduct('${id}')">Eliminar</button>
-                    </td>
-                </tr>
+            if (rows) {
+                adminContent += `
+                    <tr>
+                        <td><img src="${product.preview || ''}" width="45" style="border-radius:5px; object-fit:cover;"></td>
+                        <td><strong>${product.name}</strong><br><small>${product.category}</small></td>
+                        <td>${product.stock}</td>
+                        <td>${product.fb || '-'}</td>
+                        <td>${product.ml || '-'}</td>
+                        <td>
+                            <button class="btn" style="background:#f0ad4e; padding:4px 8px; font-size:12px; margin-right:4px;" onclick="prepareEdit('${id}', '${product.name.replace(/'/g, "\\'")}', '${product.category}', '${product.fb}', '${product.ml}', '${product.stock}', '${product.sizes}', '${product.colors}', '${product.detail}', '${product.preview}')">Editar</button>
+                            <button class="btn" style="background:#d9534f; padding:4px 8px; font-size:12px;" onclick="deleteProduct('${id}')">Eliminar</button>
+                        </td>
+                    </tr>
+                `;
+            }
+
+            publicContent += `
+                <div class="card">
+                    <img src="${product.preview || ''}" alt="${product.name}">
+                    <h3>${product.name}</h3>
+                    <p><b>Categoría:</b> ${product.category}</p>
+                    <p><b>WhatsApp:</b> ${product.fb || 'Consultar'}</p>
+                    <p><b>Stock:</b> ${product.stock}</p>
+                    <p><small>${product.detail || ''}</small></p>
+                </div>
             `;
         });
+
+        if (rows) rows.innerHTML = adminContent;
+        if (storeGrid && !document.getElementById('admin').classList.contains('on')) {
+            storeGrid.innerHTML = publicContent;
+        }
     }).catch((error) => {
         console.error("Error cargando productos: ", error);
     });
 }
-
 // Preparar los datos para editar un producto
 function prepareEdit(id, name, category, fb, ml, stock, sizes, colors, detail, preview) {
     document.getElementById('editid').value = id;
