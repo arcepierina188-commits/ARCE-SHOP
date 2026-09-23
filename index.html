@@ -324,11 +324,6 @@ async function prepareEdit(id) {
         alert("Hubo un error al cargar el producto para editar.");
     }
 }
-        }
-    }).catch((error) => {
-        console.error("Error cargando productos: ", error);
-    });
-}
 // Preparar los datos para editar un producto
 function prepareEdit(id, name, category, fb, ml, stock, sizes, colors, detail, preview) {
     document.getElementById('editid').value = id;
