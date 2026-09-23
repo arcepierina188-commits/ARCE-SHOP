@@ -270,15 +270,17 @@ function loadProducts() {
                 `;
             }
 
-            publicContent += `
+           publicContent += `
                 <div class="card">
                     <img src="${product.preview || ''}" alt="${product.name}">
                     <h3>${product.name}</h3>
                     <p><b>Categoría:</b> ${product.category}</p>
                     <p><b>WhatsApp:</b> ${product.fb || 'Consultar'}</p>
+                    <p><b>Instagram:</b> ${product.ml || 'Consultar'}</p>
                     <p><b>Stock:</b> ${product.stock}</p>
                     <p><small>${product.detail || ''}</small></p>
                 </div>
+            `;
             `;
         });
 
