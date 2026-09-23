@@ -174,29 +174,24 @@ btnElem.innerText = "Entrar";   
                           }
                     }
 // Función que faltaba y causaba el error en la consolafunction filterCat(cat) {    console.log("Categoría seleccionada:", cat);    // Aquí puedes añadir la lógica para filtrar los productos en pantalla si lo deseas}
-function clearForm() {    
-  document.getElementById('editId').value = '';    
-                      document.getElementById('name').value = '';    
-                      document.getElementById('fb').value = '';    
-                      document.getElementById('ml').value = '';    
-                      document.getElementById('stock').value = '1';    
-                      document.getElementById('sizes').value = '';    
-                      document.getElementById('colors').value = '';    
-                      document.getElementById('detail').value = '';    
-                      document.getElementById('preview').src = '';}
-function loadPhoto(event) {    
-  const reader = new FileReader();    
-                           reader.onload = function(){       
-  document.getElementById('preview').src = reader.result;    
-}    
-  if(event.target.files[0]) {        
-  reader.readAsDataURL(event.target.files[0]);    
-                             }
-                          }
-function saveSettings() {     
-  alert("Datos de contacto guardados."); 
-                        }
-function saveProduct() {
+// Función para limpiar el formulario
+function clearForm() {
+    const editInput = document.getElementById('editid');
+    if (editInput) editInput.value = '';
+    document.getElementById('name').value = '';
+    document.getElementById('fb').value = '';
+    document.getElementById('ml').value = '';
+    document.getElementById('stock').value = '1';
+    document.getElementById('sizes').value = '';
+    document.getElementById('colors').value = '';
+    document.getElementById('detail').value = '';
+    const preview = document.getElementById('preview');
+    if (preview) preview.src = '';
+}
+
+// Guardar o Actualizar producto en Firebase (Visible en cualquier dispositivo)
+async function saveProduct() {
+    const editId = document.getElementById('editid') ? document.getElementById('editid').value : '';
     const name = document.getElementById('name').value;
     const category = document.getElementById('category').value;
     const fb = document.getElementById('fb').value;
@@ -212,55 +207,102 @@ function saveProduct() {
         return;
     }
 
-    const newProduct = { name, category, fb, ml, stock, sizes, colors, detail, preview };
+    const productData = {
+        name,
+        category,
+        fb,
+        ml,
+        stock,
+        sizes,
+        colors,
+        detail,
+        preview,
+        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+    };
 
-    // Obtener productos guardados o lista vacía
-    let products = JSON.parse(localStorage.getItem('arce_products')) || [];
-    products.push(newProduct);
-    
-    // Guardar en localStorage
-    localStorage.setItem('arce_products', JSON.stringify(products));
+    try {
+        if (editId) {
+            // Si tiene ID, actualiza el producto existente
+            await db.collection('products').doc(editId).update(productData);
+            alert("¡Producto actualizado correctamente!");
+        } else {
+            // Si no tiene ID, crea uno nuevo en la nube
+            await db.collection('products').add(productData);
+            alert("¡Producto guardado correctamente en la nube!");
+        }
 
-    alert("Producto guardado correctamente.");
-    clearForm();
-    loadTable(); // Actualiza la tabla automáticamente
+        clearForm();
+        loadProducts();
+    } catch (error) {
+        console.error("Error al guardar en Firebase:", error);
+        alert("Hubo un error al guardar el producto. Revisa la consola.");
+    }
 }
 
-// Función para mostrar los productos en la tabla
-function loadTable() {
+// Cargar productos desde Firebase para mostrarlos en la tienda y administración
+function loadProducts() {
     const rows = document.getElementById('rows');
     if (!rows) return;
-    
-    let products = JSON.parse(localStorage.getItem('arce_products')) || [];
-    rows.innerHTML = "";
 
-    products.forEach((product, index) => {
-        rows.innerHTML += `
-            <tr>
-                <td><img src="${product.preview}" width="50" style="border-radius:5px;"></td>
-                <td><strong>${product.name}</strong><br><small>${product.category}</small></td>
-                <td>${product.stock}</td>
-                <td>${product.fb}</td>
-                <td>${product.ml}</td>
-                <td>
-                    <button class="btn" style="background:#d9534f; padding:5px 10px;" onclick="deleteProduct(${index})">Eliminar</button>
-                </td>
-            </tr>
-        `;
+    db.collection('products').orderBy('createdAt', 'desc').get().then((querySnapshot) => {
+        rows.innerHTML = "";
+        querySnapshot.forEach((doc) => {
+            const product = doc.data();
+            const id = doc.id;
+
+            rows.innerHTML += `
+                <tr>
+                    <td><img src="${product.preview || ''}" width="45" style="border-radius:5px; object-fit:cover;"></td>
+                    <td><strong>${product.name}</strong><br><small>${product.category}</small></td>
+                    <td>${product.stock}</td>
+                    <td>${product.fb || '-'}</td>
+                    <td>${product.ml || '-'}</td>
+                    <td>
+                        <button class="btn" style="background:#f0ad4e; padding:4px 8px; font-size:12px; margin-right:4px;" onclick="prepareEdit('${id}', '${product.name.replace(/'/g, "\\'")}', '${product.category}', '${product.fb}', '${product.ml}', '${product.stock}', '${product.sizes}', '${product.colors}', '${product.detail}', '${product.preview}')">Editar</button>
+                        <button class="btn" style="background:#d9534f; padding:4px 8px; font-size:12px;" onclick="deleteProduct('${id}')">Eliminar</button>
+                    </td>
+                </tr>
+            `;
+        });
+    }).catch((error) => {
+        console.error("Error cargando productos: ", error);
     });
 }
 
-// Función para eliminar un producto
-function deleteProduct(index) {
-    let products = JSON.parse(localStorage.getItem('arce_products')) || [];
-    products.splice(index, 1);
-    localStorage.setItem('arce_products', JSON.stringify(products));
-    loadTable();
+// Preparar los datos para editar un producto
+function prepareEdit(id, name, category, fb, ml, stock, sizes, colors, detail, preview) {
+    document.getElementById('editid').value = id;
+    document.getElementById('name').value = name;
+    document.getElementById('category').value = category;
+    document.getElementById('fb').value = fb;
+    document.getElementById('ml').value = ml;
+    document.getElementById('stock').value = stock;
+    document.getElementById('sizes').value = sizes;
+    document.getElementById('colors').value = colors;
+    document.getElementById('detail').value = detail;
+    document.getElementById('preview').src = preview;
+    
+    // Subir la pantalla hacia arriba para ver el formulario de carga
+    window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-// Cargar la tabla al iniciar la página
+// Eliminar producto de la base de datos
+async function deleteProduct(id) {
+    if (confirm("¿Estás segura de que quieres eliminar este producto?")) {
+        try {
+            await db.collection('products').doc(id).delete();
+            alert("Producto eliminado.");
+            loadProducts();
+        } catch (error) {
+            console.error("Error al eliminar:", error);
+            alert("No se pudo eliminar el producto.");
+        }
+    }
+}
+
+// Cargar los productos automáticamente al abrir la página
 window.onload = function() {
-    loadTable();
+    loadProducts();
 };
 </script>
 </body>
