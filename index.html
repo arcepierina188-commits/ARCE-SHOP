@@ -324,21 +324,38 @@ async function prepareEdit(id) {
         alert("Hubo un error al cargar el producto para editar.");
     }
 }
-// Preparar los datos para editar un producto
-function prepareEdit(id, name, category, fb, ml, stock, sizes, colors, detail, preview) {
-    document.getElementById('editid').value = id;
-    document.getElementById('name').value = name;
-    document.getElementById('category').value = category;
-    document.getElementById('fb').value = fb;
-    document.getElementById('ml').value = ml;
-    document.getElementById('stock').value = stock;
-    document.getElementById('sizes').value = sizes;
-    document.getElementById('colors').value = colors;
-    document.getElementById('detail').value = detail;
-    document.getElementById('preview').src = preview;
-    
-    // Subir la pantalla hacia arriba para ver el formulario de carga
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+// Buscar el producto en Firebase y cargarlo en el formulario para editar
+async function prepareEdit(id) {
+    try {
+        const doc = await db.collection('products').doc(id).get();
+        if (doc.exists) {
+            const product = doc.data();
+            
+            const editInput = document.getElementById('editid');
+            if (editInput) editInput.value = id;
+            
+            document.getElementById('name').value = product.name || '';
+            document.getElementById('category').value = product.category || '';
+            document.getElementById('fb').value = product.fb || product.whatsapp || '';
+            document.getElementById('ml').value = product.ml || '';
+            document.getElementById('stock').value = product.stock || '1';
+            document.getElementById('sizes').value = product.sizes || '';
+            document.getElementById('colors').value = product.colors || '';
+            document.getElementById('detail').value = product.detail || '';
+            
+            const preview = document.getElementById('preview');
+            if (preview && product.preview) {
+                preview.src = product.preview;
+            }
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        } else {
+            alert("No se encontró el producto.");
+        }
+    } catch (error) {
+        console.error("Error al preparar la edición: ", error);
+        alert("Hubo un error al cargar el producto para editar.");
+    }
 }
 
 // Eliminar producto de la base de datos
