@@ -272,13 +272,14 @@ function loadProducts() {
 
            publicContent += `
                 <div class="card">
+                <p><b>Talle:</b> ${product.sizes || 'Único'}</p>
                     <img src="${product.preview || ''}" alt="${product.name}">
                     <h3>${product.name}</h3>
-                    <p><b>Categoría:</b> ${product.category}</p>
+                    <p><b>Categoría:</b>${product.category}</p>
                     <div class="price-box">
                     <span class="price-amount">$${product.fb || 'Consultar'}</span>
                     </div>
-                    <a href="https://wa.me/TU_NUMERO_AQUI?text=Hola,%20quiero%20consultar%20por%20el%20producto%20${encodeURIComponent(product.name)}" target="_blank" class="btn-whatsapp-card">
+                    <a href=""https://wa.me/5492634506374?text=Hola,%20quiero%20consultar%20por%20el%20producto%20${encodeURIComponent(product.name)}" target="_blank" class="btn-whatsapp-card">
   <i class="fab fa-whatsapp"></i> Consultar por WhatsApp
 </a>
                     <p><b>Stock:</b> ${product.stock}</p>
