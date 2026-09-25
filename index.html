@@ -149,12 +149,12 @@ if (storeSection) storeSection.classList.remove('off');
 
 const adminSection = document.getElementById('admin');
 if (adminSection) adminSection.classList.add('on');
-function showStore() {    
+window.showStore = function() {    
   document.getElementById('login').style.display = 'none';    
   document.getElementById('store').classList.remove('off');    
   document.getElementById('admin').classList.remove('on');
     }
-function showAdminModal() {    
+ window.showAdminModal = function() {   
   document.getElementById('login').style.display = 'flex';    
   document.getElementById('loginMsg').innerText = ''; 
   }
