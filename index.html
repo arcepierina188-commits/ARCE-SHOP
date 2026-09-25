@@ -110,29 +110,13 @@ document.getElementById('btnTienda').addEventListener('click', function() {
     const loginSec = document.getElementById('login');
     if(loginSec) loginSec.style.display = 'none';
     const storeSec = document.getElementById('store');
-    if(storeSec) {
-        storeSec.classList.remove('off');
-        storeSec.style.display = 'block';
-    }
-    const adminSec = document.getElementById('admin');
-    if(adminSec) {
-        adminSec.classList.remove('on');
-        adminSec.style.display = 'none';
-    }
+    if(storeSec) storeSec.style.display = 'block';
 });
 
 document.getElementById('btnAdmin').addEventListener('click', function() {
     const loginSec = document.getElementById('login');
     if(loginSec) loginSec.style.display = 'flex';
-    const msg = document.getElementById('loginMsg');
-    if(msg) msg.innerText = '';
-    const adminSec = document.getElementById('admin');
-    if(adminSec) {
-        adminSec.classList.add('on');
-        adminSec.style.display = 'block';
-        adminSec.scrollIntoView({ behavior: 'smooth' });
-    }
-}); 
+});
 // Función segura para filtrar
     window.filterCat = function(cat) {
         console.log("Categoría seleccionada:", cat);
