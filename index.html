@@ -111,13 +111,19 @@ footer{background:#111;color:#aaa;text-align:center;padding:28px;margin-top:35px
             loadProducts(cat);
         }
     };
+window.showStore = function() {
+    const loginSec = document.getElementById('login');
+    if(loginSec) loginSec.style.display = 'none';
+    const storeSec = document.getElementById('store');
+    if(storeSec) storeSec.classList.remove('off');
+};
 
-    // Función segura para administración
-    window.showAdminModal = function() {
-        const adminSection = document.getElementById('admin');
-        if (adminSection) adminSection.scrollIntoView({ behavior: 'smooth' });
-    };
-
+window.showAdminModal = function() {
+    const loginSec = document.getElementById('login');
+    if(loginSec) loginSec.style.display = 'flex';
+    const msg = document.getElementById('loginMsg');
+    if(msg) msg.innerText = '';
+};
     // Función segura para tienda
     window.showStore = function() {
         const catalog = document.getElementById('catalog');
