@@ -271,22 +271,62 @@ function loadProducts() {
                     </tr>
                 `;
             }
-if (rows) {
-            adminContent += `
-                <tr>
-                    <td><img src="${product.preview || ''}" width="45" style="border-radius:5px; object-fit:cover;"></td>
-                    <td><strong>${product.name}</strong><br><small>${product.category}</small></td>
-                    <td>${product.stock}</td>
-                    <td>${product.fb || '-'}</td>
-                    <td>${product.ml || '-'}</td>
-                    <td>
-                        <button class="btn" style="background:#f0ad4e; padding:4px 8px; font-size:12px; margin-right:4px;" onclick="prepareEdit('${id}')">Editar</button>
-                        <button class="btn" style="background:#d9534f; padding:4px 8px; font-size:12px;" onclick="deleteProduct('${id}')">Eliminar</button>
-                    </td>
-                </tr>
-            `;
-        }
+// Cargar productos desde Firebase para mostrarlos en la tienda y administración
+function loadProducts() {
+    const rows = document.getElementById('rows');
+    
+    db.collection('products').orderBy('createdAt', 'desc').get().then((querySnapshot) => {
+        if (rows) rows.innerHTML = '';
 
+        const storeGrid = document.querySelector('.main-grid') || document.querySelector('.grid');
+        let publicContent = '';
+        let adminContent = '';
+
+        querySnapshot.forEach((doc) => {
+            const product = doc.data();
+            const id = doc.id;
+
+            // 1. Armamos la fila para la tabla de administración
+            if (rows) {
+                adminContent += `
+                    <tr>
+                        <td><img src="${product.preview || ''}" width="45" style="border-radius:5px; object-fit:cover;"></td>
+                        <td><b>${product.name}</b><br><small>${product.category}</small></td>
+                        <td>${product.stock}</td>
+                        <td>$${product.fb || '-'}</td>
+                        <td>$${product.ml || '-'}</td>
+                        <td>
+                            <button class="btn" style="background:#f0ad4e; padding:4px 8px; font-size:12px; margin-right:4px;" onclick="prepareEdit('${id}')">Editar</button>
+                            <button class="btn" style="background:#d9534f; padding:4px 8px; font-size:12px;" onclick="deleteProduct('${id}')">Eliminar</button>
+                        </td>
+                    </tr>
+                `;
+            }
+
+            // 2. Armamos la tarjeta del producto para la tienda pública
+            if (storeGrid) {
+                publicContent += `
+                    <div class="card">
+                        <img src="${product.preview || ''}" alt="${product.name}">
+                        <h3>${product.name}</h3>
+                        <p>${product.category}</p>
+                        <span>Stock: ${product.stock}</span>
+                    </div>
+                `;
+            }
+        });
+
+        // Insertamos los contenidos acumulados en el HTML
+        if (rows) {
+            rows.innerHTML = adminContent;
+        }
+        if (storeGrid) {
+            storeGrid.innerHTML = publicContent;
+        }
+    }).catch((error) => {
+        console.error("Error al cargar los productos: ", error);
+    });
+}
         // 1. PRIMERO ARMAMOS LA TARJETA DEL PRODUCTO PARA LA TIENDA
         publicContent += `
       if (rows) {
@@ -304,7 +344,6 @@ if (rows) {
                 </tr>
             `;
         }
-
         // Armamos la tarjeta para la tienda pública
         publicContent += `
             <div class="card">
