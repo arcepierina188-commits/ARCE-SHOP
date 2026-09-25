@@ -323,6 +323,16 @@ if (rows) {
     if (storeGrid) {
         storeGrid.innerHTML = publicContent;
     }
+    / Mostramos todo en la tienda
+    if (storeGrid) {
+        storeGrid.innerHTML = publicContent;
+    }
+
+    // <-- AGREGÁ ESTAS LÍNEAS ACÁ PARA QUE SE LLENE LA TABLA DEL ADMIN
+    if (rows) {
+        rows.innerHTML = adminContent;
+    }
+}); // Cierra el .then() de Firebase
 }     
 
 // Buscar el producto en Firebase y cargarlo en el formulario para editar
