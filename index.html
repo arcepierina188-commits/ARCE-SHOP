@@ -127,19 +127,6 @@ window.filterCat = function(cat) {
         loadProducts(cat);
     }
 }
- // Función para mostrar la sección de administración
-window.showAdminModal = function() {
-  const adminSection = document.getElementById('admin');
-  if (adminSection) {
-    adminSection.scrollIntoView({ behavior: 'smooth' });
-  }
-};
-  // Función para filtrar productos por categoría
-window.filterCat = function(cat) {
-  console.log("Categoría seleccionada:", cat);
-  loadProducts(cat);
-};
-}
 // ==========================================// CONFIGURACIÓN DE FIREBASE (Asegúrate de poner tus datos reales aquí)// ==========================================
   const firebaseConfig = {    
   apiKey: "AIzaSyCElLtSnDC6IIALOaPCbmcBSxsKvRt_bpI",
