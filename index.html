@@ -269,29 +269,61 @@ function loadProducts() {
                     </tr>
                 `;
             }
-
-           publicContent += `
-                <div class="card">
-                <p><b>Talle:</b> ${product.sizes || 'Único'}</p>
-                    <img src="${product.preview || ''}" alt="${product.name}">
-                    <h3>${product.name}</h3>
-                    <p><b>Categoría:</b>${product.category}</p>
-                    <div class="price-box">
-                    <span class="price-amount">$${product.fb || 'Consultar'}</span>
-                    <p><b>Stock:</b> ${product.stock}</p>
-                    <p><small>${product.detail || ''}</small></p>
-                </div>
+if (rows) {
+            adminContent += `
+                <tr>
+                    <td><img src="${product.preview || ''}" width="45" style="border-radius:5px; object-fit:cover;"></td>
+                    <td><strong>${product.name}</strong><br><small>${product.category}</small></td>
+                    <td>${product.stock}</td>
+                    <td>${product.fb || '-'}</td>
+                    <td>${product.ml || '-'}</td>
+                    <td>
+                        <button class="btn" style="background:#f0ad4e; padding:4px 8px; font-size:12px; margin-right:4px;" onclick="prepareEdit('${id}')">Editar</button>
+                        <button class="btn" style="background:#d9534f; padding:4px 8px; font-size:12px;" onclick="deleteProduct('${id}')">Eliminar</button>
+                    </td>
+                </tr>
             `;
-        });
-
-        if (rows) rows.innerHTML = adminContent;
-        if (storeGrid && !document.getElementById('admin').classList.contains('on')) {
-            storeGrid.innerHTML = publicContent;
         }
-    }).catch((error) => {
-        console.error("Error cargando productos: ", error);
-    });
-}
+
+        // 1. PRIMERO ARMAMOS LA TARJETA DEL PRODUCTO PARA LA TIENDA
+        publicContent += `
+      if (rows) {
+            adminContent += `
+                <tr>
+                    <td><img src="${product.preview || ''}" width="45" style="border-radius:5px; object-fit:cover;"></td>
+                    <td><strong>${product.name}</strong><br><small>${product.category}</small></td>
+                    <td>${product.stock}</td>
+                    <td>${product.fb || '-'}</td>
+                    <td>${product.ml || '-'}</td>
+                    <td>
+                        <button class="btn" style="background:#f0ad4e; padding:4px 8px; font-size:12px; margin-right:4px;" onclick="prepareEdit('${id}')">Editar</button>
+                        <button class="btn" style="background:#d9534f; padding:4px 8px; font-size:12px;" onclick="deleteProduct('${id}')">Eliminar</button>
+                    </td>
+                </tr>
+            `;
+        }
+
+        // Armamos la tarjeta para la tienda pública
+        publicContent += `
+            <div class="card">
+                <p><b>Talle:</b> ${product.sizes || 'Único'}</p>
+                <img src="${product.preview || ''}" alt="${product.name}">
+                <h3>${product.name}</h3>
+                <p><b>Categoría:</b> ${product.category}</p>
+                <div class="price-box">
+                    <span class="price-amount">$${product.fb || 'Consultar'}</span>
+                </div>
+                <p><b>Stock:</b> ${product.stock}</p>
+                <p><small>${product.detail || ''}</small></p>
+            </div>
+        `;
+    }); // Cierra el forEach
+
+    // Mostramos todo en la tienda
+    if (storeGrid) {
+        storeGrid.innerHTML = publicContent;
+    }
+}     
 
 // Buscar el producto en Firebase y cargarlo en el formulario para editar
 async function prepareEdit(id) {
