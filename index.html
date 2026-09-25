@@ -327,39 +327,6 @@ function loadProducts() {
         console.error("Error al cargar los productos: ", error);
     });
 }
-       
-        // Armamos la tarjeta para la tienda pública
-        publicContent += `
-            <div class="card">
-                <p><b>Talle:</b> ${product.sizes || 'Único'}</p>
-                <img src="${product.preview || ''}" alt="${product.name}">
-                <h3>${product.name}</h3>
-                <p><b>Categoría:</b> ${product.category}</p>
-                <div class="price-box">
-                    <span class="price-amount">$${product.fb || 'Consultar'}</span>
-                </div>
-                <p><b>Stock:</b> ${product.stock}</p>
-                <p><small>${product.detail || ''}</small></p>
-            </div>
-        `;
-    }); // Cierra el forEach
-
-    // Mostramos todo en la tienda
-    if (storeGrid) {
-        storeGrid.innerHTML = publicContent;
-    }
-    / Mostramos todo en la tienda
-    if (storeGrid) {
-        storeGrid.innerHTML = publicContent;
-    }
-
-    // <-- AGREGÁ ESTAS LÍNEAS ACÁ PARA QUE SE LLENE LA TABLA DEL ADMIN
-    if (rows) {
-        rows.innerHTML = adminContent;
-    }
-}); // Cierra el .then() de Firebase
-}     
-
 // Buscar el producto en Firebase y cargarlo en el formulario para editar
 async function prepareEdit(id) {
     try {
