@@ -106,11 +106,19 @@ footer{background:#111;color:#aaa;text-align:center;padding:28px;margin-top:35px
 </main>
 <footer>ARCE SHOP · Mendoza, Argentina · WhatsApp: <span id="footerWa"></span></footer>
 <script> 
- document.getElementById('btnTienda').addEventListener('click', function() {
+document.getElementById('btnTienda').addEventListener('click', function() {
     const loginSec = document.getElementById('login');
     if(loginSec) loginSec.style.display = 'none';
     const storeSec = document.getElementById('store');
-    if(storeSec) storeSec.classList.remove('off');
+    if(storeSec) {
+        storeSec.classList.remove('off');
+        storeSec.style.display = 'block';
+    }
+    const adminSec = document.getElementById('admin');
+    if(adminSec) {
+        adminSec.classList.remove('on');
+        adminSec.style.display = 'none';
+    }
 });
 
 document.getElementById('btnAdmin').addEventListener('click', function() {
@@ -118,7 +126,13 @@ document.getElementById('btnAdmin').addEventListener('click', function() {
     if(loginSec) loginSec.style.display = 'flex';
     const msg = document.getElementById('loginMsg');
     if(msg) msg.innerText = '';
-});   
+    const adminSec = document.getElementById('admin');
+    if(adminSec) {
+        adminSec.classList.add('on');
+        adminSec.style.display = 'block';
+        adminSec.scrollIntoView({ behavior: 'smooth' });
+    }
+}); 
 // Función segura para filtrar
     window.filterCat = function(cat) {
         console.log("Categoría seleccionada:", cat);
