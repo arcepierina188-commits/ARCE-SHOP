@@ -39,8 +39,8 @@ footer{background:#111;color:#aaa;text-align:center;padding:28px;margin-top:35px
 <div class="logo">ARCE <span class="gold">SHOP</span></div>
 <nav>
 <nav>
-    <button id="btnTienda" class="btn" style="margin-right: 10px; padding: 8px 15px; cursor: pointer;">Tienda</button>
-    <button id="btnAdmin" class="btn" style="padding: 8px 15px; cursor: pointer;">Admin</button>
+<button id="btnTienda" class="btn" style="margin-right: 10px; padding: 8px 15px; cursor: pointer;" onclick="document.getElementById('login').style.display='none'; document.getElementById('store').style.display='block';">Tienda</button>
+<button id="btnAdmin" class="btn" style="padding: 8px 15px; cursor: pointer;" onclick="document.getElementById('login').style.display='flex';">Admin</button    
 </nav>
 </nav>
 </div>
@@ -492,5 +492,38 @@ window.onload = function() {
         </svg>
     </a>
 </div>
+<script>
+    document.getElementById('btnTienda').onclick = function() {
+        const loginSec = document.getElementById('login');
+        if(loginSec) loginSec.style.display = 'none';
+        
+        const storeSec = document.getElementById('store');
+        if(storeSec) {
+            storeSec.classList.remove('off');
+            storeSec.style.display = 'block';
+        }
+        
+        const adminSec = document.getElementById('admin');
+        if(adminSec) {
+            adminSec.classList.remove('on');
+            adminSec.style.display = 'none';
+        }
+    };
+
+    document.getElementById('btnAdmin').onclick = function() {
+        const loginSec = document.getElementById('login');
+        if(loginSec) loginSec.style.display = 'flex';
+        
+        const msg = document.getElementById('loginMsg');
+        if(msg) msg.innerText = '';
+        
+        const adminSec = document.getElementById('admin');
+        if(adminSec) {
+            adminSec.classList.add('on');
+            adminSec.style.display = 'block';
+            adminSec.scrollIntoView({ behavior: 'smooth' });
+        }
+    };
+</script>    
 </body>
 </html>
