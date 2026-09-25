@@ -502,14 +502,12 @@ window.onload = function() {
             storeSec.classList.remove('off');
             storeSec.style.display = 'block';
         }
-        
         const adminSec = document.getElementById('admin');
         if(adminSec) {
             adminSec.classList.remove('on');
             adminSec.style.display = 'none';
         }
     };
-
     document.getElementById('btnAdmin').onclick = function() {
         const loginSec = document.getElementById('login');
         if(loginSec) loginSec.style.display = 'flex';
