@@ -38,8 +38,6 @@ footer{background:#111;color:#aaa;text-align:center;padding:28px;margin-top:35px
 <div class="head"> 
 <div class="logo">ARCE <span class="gold">SHOP</span></div> 
 <nav>   
-<button onclick="showStore()">Tienda</button>  
-<button onclick="showAdminModal()"> Administrar</button>  
 </nav> 
 </div>
 </header>
@@ -52,9 +50,6 @@ footer{background:#111;color:#aaa;text-align:center;padding:28px;margin-top:35px
 <button class="btn" onclick="document.getElementById('catalog').scrollIntoView()">Ver productos</button> 
 </section> 
 <div class="filters"> 
-<button onclick="filterCat('Todos')">Todos</button>  
-<button onclick="filterCat('Perfumes árabes')">Perfumes</button> 
-<button onclick="filterCat('Ropa deportiva')">Ropa deportiva</button>
 </div> 
 <div id="catalog" class="grid"></div>
 </div>
@@ -107,6 +102,32 @@ footer{background:#111;color:#aaa;text-align:center;padding:28px;margin-top:35px
 </main>
 <footer>ARCE SHOP · Mendoza, Argentina · WhatsApp: <span id="footerWa"></span></footer>
 <script> 
+// Función segura para filtrar
+    window.filterCat = function(cat) {
+        console.log("Categoría seleccionada:", cat);
+        if (typeof loadProducts === 'function') {
+            loadProducts(cat);
+        }
+    };
+
+    // Función segura para administración
+    window.showAdminModal = function() {
+        const adminSection = document.getElementById('admin');
+        if (adminSection) adminSection.scrollIntoView({ behavior: 'smooth' });
+    };
+
+    // Función segura para tienda
+    window.showStore = function() {
+        const catalog = document.getElementById('catalog');
+        if (catalog) catalog.scrollIntoView({ behavior: 'smooth' });
+    };
+});
+window.showStore = function() { 
+    const catalog = document.getElementById('catalog');
+    if (catalog) {
+        catalog.scrollIntoView({ behavior: 'smooth' });
+    }
+};
 window.filterCat = function(c) { 
     console.log("¡Funciona!", c); 
     if (typeof loadProducts === 'function') loadProducts(c);
