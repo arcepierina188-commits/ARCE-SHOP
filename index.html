@@ -278,10 +278,6 @@ function loadProducts() {
                     <p><b>Categoría:</b>${product.category}</p>
                     <div class="price-box">
                     <span class="price-amount">$${product.fb || 'Consultar'}</span>
-                    </div>
-                    <a href=""https://wa.me/5492634506374?text=Hola,%20quiero%20consultar%20por%20el%20producto%20${encodeURIComponent(product.name)}" target="_blank" class="btn-whatsapp-card">
-  <i class="fab fa-whatsapp"></i> Consultar por WhatsApp
-</a>
                     <p><b>Stock:</b> ${product.stock}</p>
                     <p><small>${product.detail || ''}</small></p>
                 </div>
@@ -395,5 +391,43 @@ window.onload = function() {
     loadProducts();
 };
 </script>
+  <!-- Botón flotante único de WhatsApp estilo Vaypol -->
+<style>
+.whatsapp-float {
+    position: fixed;
+    width: 60px;
+    height: 60px;
+    bottom: 25px;
+    right: 25px;
+    background-color: #25d366;
+    color: #FFF;
+    border-radius: 50px;
+    text-align: center;
+    font-size: 30px;
+    box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.25);
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+.whatsapp-float:hover {
+    transform: scale(1.08);
+    background-color: #20ba5a;
+}
+.whatsapp-icon {
+    width: 36px;
+    height: 36px;
+    fill: #FFF;
+}
+</style>
+
+<div class="whatsapp-float">
+    <a href="https://wa.me/5492634506374?text=Hola,%20me%20gustaría%20más%20información" target="_blank" rel="noopener noreferrer" aria-label="Chat de WhatsApp">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" class="whatsapp-icon">
+            <path d="M16 0C7.164 0 0 7.164 0 16c0 2.833.738 5.496 2.025 7.808L.545 31.455l7.85-2.055C10.742 30.776 13.31 31.5 16 31.5c8.836 0 16-7.164 16-16S24.836 0 16 0z"/>
+        </svg>
+    </a>
+</div>
 </body>
 </html>
