@@ -156,7 +156,7 @@ function showAdminModal() {   
   document.getElementById('login').style.display = 'flex';    
   document.getElementById('loginMsg').innerText = ''; 
   }
-async function loginWithFirebase() {    
+window.loginWithFirebase = async function() {
 const emailInput = document.getElementById('adminEmail');    
 const passwordInput = document.getElementById('adminPassword');    
 const msgElem = document.getElementById('loginMsg');    
