@@ -107,6 +107,10 @@ footer{background:#111;color:#aaa;text-align:center;padding:28px;margin-top:35px
 </main>
 <footer>ARCE SHOP · Mendoza, Argentina · WhatsApp: <span id="footerWa"></span></footer>
 <script>
+  // Función para filtrar productos por categoría
+function filterCat(categoria) {
+    loadProducts();
+}
 // ==========================================// CONFIGURACIÓN DE FIREBASE (Asegúrate de poner tus datos reales aquí)// ==========================================
   const firebaseConfig = {    
   apiKey: "AIzaSyCElLtSnDC6IIALOaPCbmcBSxsKvRt_bpI",
