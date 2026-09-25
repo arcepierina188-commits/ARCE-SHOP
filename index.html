@@ -107,6 +107,34 @@ footer{background:#111;color:#aaa;text-align:center;padding:28px;margin-top:35px
 </main>
 <footer>ARCE SHOP · Mendoza, Argentina · WhatsApp: <span id="footerWa"></span></footer>
 <script> 
+ document.addEventListener("DOMContentLoaded", () => {
+    document.querySelectorAll("button").forEach(btn => {
+        const onclickAttr = btn.getAttribute("onclick");
+        if (!onclickAttr) return;
+
+        if (onclickAttr.includes("filterCat")) {
+            const match = onclickAttr.match(/'([^']+)'/);
+            if (match) {
+                const cat = match[1];
+                btn.removeAttribute("onclick");
+                btn.addEventListener("click", () => {
+                    console.log("Categoría seleccionada:", cat);
+                    loadProducts(cat);
+                });
+            }
+        }
+        
+        if (onclickAttr.includes("showAdminModal")) {
+            btn.removeAttribute("onclick");
+            btn.addEventListener("click", () => {
+                const adminSection = document.getElementById('admin');
+                if (adminSection) {
+                    adminSection.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        }
+    });
+});
  // Función para mostrar la sección de administración
 window.showAdminModal = function() {
   const adminSection = document.getElementById('admin');
