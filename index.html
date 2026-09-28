@@ -258,7 +258,7 @@ function loadProducts() { 
           <h3>${product.name}</h3>             
           <div class="price">$${product.fb || '0'}</div>             
           <div class="ml">${product.detail || ''}</div>            
-          ${product.sizes ? <div class="sizes" style="font-size:12px; color:#555; margin-top:4px;"><b>Talles:</b> ${product.sizes}</div> : ''}
+          ${product.sizes ?'<div class="sizes" style="font-size:12px; color:#555; margin-top:4px;"><b>Talles:</b> ' + product.sizes + '</div>' : ''}
           </div>          
           </div>          
           `;      
