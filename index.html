@@ -54,10 +54,10 @@ footer{background:#111;color:#aaa;text-align:center;padding:28px;margin-top:35px
 <button class="btn" onclick="document.getElementById('catalog').scrollIntoView()">Ver productos</button> 
 </section> 
 <div class="filters">
-  <button class="active" onclick="filterCat('todos', this)">Todos</button>
-  <button onclick="filterCat('Perfumes árabes', this)">Perfumes árabes</button>
-  <button onclick="filterCat('Ropa deportiva', this)">Ropa deportiva</button>
-  <button onclick="filterCat('Tecnología', this)">Tecnología</button>
+  <button class="active" onclick="filterCat('todos', this)">Todos</button>
+  <button onclick="filterCat('Perfumes árabes', this)">Perfumes árabes</button>
+  <button onclick="filterCat('Ropa deportiva', this)">Ropa deportiva</button>
+  <button onclick="filterCat('Tecnología', this)">Tecnología</button>
 </div>
 <div id="catalog" class="grid"></div>
 </div>
@@ -120,7 +120,7 @@ messagingSenderId: "202498685851", 
 appId: "1:202498685851:web:66cd1b2a4599fb8c813f3e",
 };
 if (!firebase.apps.length) {     
-    firebase.initializeApp(firebaseConfig);
+    firebase.initializeApp(firebaseConfig);
 }
 const auth = firebase.auth();
 const db = firebase.firestore();
@@ -146,9 +146,9 @@ const btnElem = document.getElementById('loginBtn'); 
 const email = emailInput.value.trim();      
 const password = passwordInput.value;
   if (!email || !password) {           
-      msgElem.innerText = "Completá el correo y la contraseña.";            
-      return;      
-  }
+      msgElem.innerText = "Completá el correo y la contraseña.";            
+      return;      
+  }
 btnElem.disabled = true;      
 btnElem.innerText = "Validando...";     
 msgElem.innerText = "";
@@ -160,35 +160,35 @@ document.getElementById('admin').classList.add('on');         
 } catch (error) {           
 console.error("Error de autenticación:", error);           
 if (error.code === 'auth/invalid-credential' || error.code === 'auth/wrong-password' || error.code === 'auth/user-not-found') {                  
-    msgElem.innerText = "Correo o contraseña incorrectos.";          
+    msgElem.innerText = "Correo o contraseña incorrectos.";          
 } else if (error.code === 'auth/network-request-failed') {                 
-    msgElem.innerText = "Error de red. Verificá tu conexión.";          
+    msgElem.innerText = "Error de red. Verificá tu conexión.";          
 } else {                 
-    msgElem.innerText = "Error: " + (error.message || "No se pudo conectar.");           
+    msgElem.innerText = "Error: " + (error.message || "No se pudo conectar.");           
 }     
 } finally {           
-    btnElem.disabled = false;           
-    btnElem.innerText = "Entrar";     
+    btnElem.disabled = false;           
+    btnElem.innerText = "Entrar";     
 }
 };
 window.filterCat = function(cat) {  
-    console.log("Categoría seleccionada:", cat);  
-    if (typeof loadProducts === 'function') {    
-        loadProducts(cat);  
-    }
+    console.log("Categoría seleccionada:", cat);  
+    if (typeof loadProducts === 'function') {    
+        loadProducts(cat);  
+    }
 };
 function clearForm() {  
-    const editInput = document.getElementById('editid');  
-    if (editInput) editInput.value = '';  
-    document.getElementById('name').value = '';  
-    document.getElementById('fb').value = '';  
-    document.getElementById('ml').value = '';  
-    document.getElementById('stock').value = '1';  
-    document.getElementById('sizes').value = '';  
-    document.getElementById('colors').value = '';  
-    document.getElementById('detail').value = '';  
-    const preview = document.getElementById('preview');  
-    if (preview) preview.src = '';
+    const editInput = document.getElementById('editid');  
+    if (editInput) editInput.value = '';  
+    document.getElementById('name').value = '';  
+    document.getElementById('fb').value = '';  
+    document.getElementById('ml').value = '';  
+    document.getElementById('stock').value = '1';  
+    document.getElementById('sizes').value = '';  
+    document.getElementById('colors').value = '';  
+    document.getElementById('detail').value = '';  
+    const preview = document.getElementById('preview');  
+    if (preview) preview.src = '';
 }
 async function saveProduct() {  
 const editId = document.getElementById('editid') ? document.getElementById('editid').value : '';  
@@ -202,170 +202,170 @@ const colors = document.getElementById('colors').value; 
 const detail = document.getElementById('detail').value;  
 const preview = document.getElementById('preview').src;
   if (!name) {    
-      alert("Por favor completa al menos el nombre del producto.");    
-      return;  
-  }
+      alert("Por favor completa al menos el nombre del producto.");    
+      return;  
+  }
   const productData = {    
-      name,    
-      category,    
-      fb,    
-      ml,    
-      stock,    
-      sizes,    
-      colors,    
-      detail,    
-      preview,    
-      createdAt: firebase.firestore.FieldValue.serverTimestamp()  
-  };
+      name,    
+      category,    
+      fb,    
+      ml,    
+      stock,    
+      sizes,    
+      colors,    
+      detail,    
+      preview,    
+      createdAt: firebase.firestore.FieldValue.serverTimestamp()  
+  };
   try {    
 if (editId) {     
 await db.collection('products').doc(editId).update(productData);      
 alert("¡Producto actualizado correctamente!");   
-      } else {    
+      } else {    
 await db.collection('products').add(productData);      
 alert("¡Producto guardado correctamente en la nube!");    
 }    
-      clearForm();    
-      loadProducts(); 
-  } catch (error) {    
-      console.error("Error al guardar en Firebase:", error);    
-      alert("Hubo un error al guardar el producto. Revisa la consola.");  
-  }
+      clearForm();    
+      loadProducts(); 
+  } catch (error) {    
+      console.error("Error al guardar en Firebase:", error);    
+      alert("Hubo un error al guardar el producto. Revisa la consola.");  
+  }
 }
 let todosLosProductos = [];
 let categoriaActual = 'todos';
 
 window.filterCat = function(cat, boton) { 
-    categoriaActual = cat;
-    const botones = document.querySelectorAll('.filters button');
-    botones.forEach(b => b.classList.remove('active'));
-    if(boton) boton.classList.add('active');
-    renderizarProductos();
+    categoriaActual = cat;
+    const botones = document.querySelectorAll('.filters button');
+    botones.forEach(b => b.classList.remove('active'));
+    if(boton) boton.classList.add('active');
+    renderizarProductos();
 };
 
 function loadProducts() { 
-    db.collection('products').orderBy('createdAt', 'desc').get().then((querySnapshot) => { 
-        todosLosProductos = [];
-        querySnapshot.forEach((doc) => {      
-            todosLosProductos.push({
-                id: doc.id,
-                ...doc.data()
-            });
-        });
-        renderizarProductos();
-    }).catch((error) => {    
-        console.error("Error al cargar los productos: ", error); 
-    });
+    db.collection('products').orderBy('createdAt', 'desc').get().then((querySnapshot) => { 
+        todosLosProductos = [];
+        querySnapshot.forEach((doc) => {      
+            todosLosProductos.push({
+                id: doc.id,
+                ...doc.data()
+            });
+        });
+        renderizarProductos();
+    }).catch((error) => {    
+        console.error("Error al cargar los productos: ", error); 
+    });
 }
 
 function renderizarProductos() {
-    const rows = document.getElementById('rows');
-    const storeGrid = document.querySelector('.grid'); 
-    let adminContent = ''; 
-    let publicContent = ''; 
+    const rows = document.getElementById('rows');
+    const storeGrid = document.querySelector('.grid'); 
+    let adminContent = ''; 
+    let publicContent = ''; 
 
-    todosLosProductos.forEach((product) => {
-        if (rows) {          
-            adminContent += `          
-            <tr>           
-            <td><img src="${product.preview || ''}" width="45" style="border-radius:5px; object-fit:cover;"></td>           
-            <td><b>${product.name}</b><br><small>${product.category}</small></td>           
-            <td>${product.stock}</td>           
-            <td>$${product.fb || '-'}</td>           
-            <td>$${product.ml || '-'}</td>           
-            <td>            
-            <button class="btn" style="background:#f0ad4e; padding:4px 8px; font-size:12px; margin-right:4px;" onclick="prepareEdit('${product.id}')">Editar</button>            
-            <button class="btn" style="background:#d9534f; padding:4px 8px; font-size:12px;" onclick="deleteProduct('${product.id}')">Eliminar</button>           
-            </td>           
-            </tr>          
-            `;      
-        }
+    todosLosProductos.forEach((product) => {
+        if (rows) {          
+            adminContent += `          
+            <tr>           
+            <td><img src="${product.preview || ''}" width="45" style="border-radius:5px; object-fit:cover;"></td>           
+            <td><b>${product.name}</b><br><small>${product.category}</small></td>           
+            <td>${product.stock}</td>           
+            <td>$${product.fb || '-'}</td>           
+            <td>$${product.ml || '-'}</td>           
+            <td>            
+            <button class="btn" style="background:#f0ad4e; padding:4px 8px; font-size:12px; margin-right:4px;" onclick="prepareEdit('${product.id}')">Editar</button>            
+            <button class="btn" style="background:#d9534f; padding:4px 8px; font-size:12px;" onclick="deleteProduct('${product.id}')">Eliminar</button>           
+            </td>           
+            </tr>          
+            `;      
+        }
 
-        if (categoriaActual === 'todos' || product.category === categoriaActual) {
-            if (storeGrid) {        
-                publicContent += `        
-                <div class="card">           
-                <img src="${product.preview || ''}" alt="${product.name}">           
-                <div class="body">           
-                <div class="tag">${product.category}</div>           
-                <h3>${product.name}</h3>           
-                <div class="price">$${product.fb || '0'}</div>           
-                <div class="ml">${product.detail || ''}</div>           
-                ${product.sizes ? '<div class="sizes" style="font-size:12px; color:#555; margin-top:4px;"><b>Talles:</b> ' + product.sizes + '</div>' : ''}
-                </div>           
-                </div>        
-                `;      
-            }
-        }
-    });
+        if (categoriaActual === 'todos' || product.category === categoriaActual) {
+            if (storeGrid) {        
+                publicContent += `        
+                <div class="card">           
+                <img src="${product.preview || ''}" alt="${product.name}">           
+                <div class="body">           
+                <div class="tag">${product.category}</div>           
+                <h3>${product.name}</h3>           
+                <div class="price">$${product.fb || '0'}</div>           
+                <div class="ml">${product.detail || ''}</div>           
+                ${product.sizes ? '<div class="sizes" style="font-size:12px; color:#555; margin-top:4px;"><b>Talles:</b> ' + product.sizes + '</div>' : ''}
+                </div>           
+                </div>        
+                `;      
+            }
+        }
+    });
 
-    if (rows) rows.innerHTML = adminContent; 
-    if (storeGrid) {
-        storeGrid.innerHTML = publicContent || '<p style="grid-column: 1/-1; text-align:center; padding: 20px;">No hay productos en esta categoría.</p>';
-    }
+    if (rows) rows.innerHTML = adminContent; 
+    if (storeGrid) {
+        storeGrid.innerHTML = publicContent || '<p style="grid-column: 1/-1; text-align:center; padding: 20px;">No hay productos en esta categoría.</p>';
+    }
 }
 document.getElementById('btnAdmin').onclick = function() {
-    const loginSec = document.getElementById('login');
-    if(loginSec) loginSec.style.display = 'flex';
-    const msg = document.getElementById('loginMsg');
-    if(msg) msg.innerText = '';
-    const adminSec = document.getElementById('admin');
-    if(adminSec) {
-        adminSec.classList.add('on');
-        adminSec.style.display = 'block';
-        adminSec.scrollIntoView({ behavior: 'smooth' });
-    }
+    const loginSec = document.getElementById('login');
+    if(loginSec) loginSec.style.display = 'flex';
+    const msg = document.getElementById('loginMsg');
+    if(msg) msg.innerText = '';
+    const adminSec = document.getElementById('admin');
+    if(adminSec) {
+        adminSec.classList.add('on');
+        adminSec.style.display = 'block';
+        adminSec.scrollIntoView({ behavior: 'smooth' });
+    }
 };
 function deleteProduct(id) {
-    if (confirm("¿Estás segura de que querés eliminar este producto?")) {
-        db.collection('products').doc(id).delete().then(() => {
-            loadProducts();
-        }).catch((error) => {
-            console.error("Error al eliminar el producto: ", error);
-        });
-    }
+    if (confirm("¿Estás segura de que querés eliminar este producto?")) {
+        db.collection('products').doc(id).delete().then(() => {
+            loadProducts();
+        }).catch((error) => {
+            console.error("Error al eliminar el producto: ", error);
+        });
+    }
 }
 
 function prepareEdit(id) {
-    const product = todosLosProductos.find(p => p.id === id);
-    if (product) {
-        if(document.getElementById('productId')) document.getElementById('productId').value = product.id;
-        if(document.getElementById('name')) document.getElementById('name').value = product.name || '';
-        if(document.getElementById('category')) document.getElementById('category').value = product.category || '';
-        if(document.getElementById('stock')) document.getElementById('stock').value = product.stock || '';
-        if(document.getElementById('fb')) document.getElementById('fb').value = product.fb || '';
-        if(document.getElementById('ml')) document.getElementById('ml').value = product.ml || '';
-        if(document.getElementById('detail')) document.getElementById('detail').value = product.detail || '';
-      // Agregá esto para la imagen:
-        if(product.preview && document.getElementById('imagePreview')) {
-            document.getElementById('imagePreview').src = product.preview;
-    }
-  }   
+    const product = todosLosProductos.find(p => p.id === id);
+    if (product) {
+        if(document.getElementById('productId')) document.getElementById('productId').value = product.id;
+        if(document.getElementById('name')) document.getElementById('name').value = product.name || '';
+        if(document.getElementById('category')) document.getElementById('category').value = product.category || '';
+        if(document.getElementById('stock')) document.getElementById('stock').value = product.stock || '';
+        if(document.getElementById('fb')) document.getElementById('fb').value = product.fb || '';
+        if(document.getElementById('ml')) document.getElementById('ml').value = product.ml || '';
+        if(document.getElementById('detail')) document.getElementById('detail').value = product.detail || '';
+      // Agregá esto para la imagen:
+        if(product.preview && document.getElementById('imagePreview')) {
+            document.getElementById('imagePreview').src = product.preview;
+    }
+  }   
 } 
- const fileInput = document.querySelector('input[type="file"]');
+ const fileInput = document.querySelector('input[type="file"]');
 if (fileInput) {
-    fileInput.addEventListener('change', function(e) {
-        const file = e.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = function(event) {
-                // Busca la imagen de vista previa y le pone la foto cargada
-                const imgTag = document.querySelector('#admin img') || document.querySelector('.preview-container img') || document.querySelector('input[type="file"] ~ img');
-                if (imgTag) {
-                    imgTag.src = event.target.result;
-                }
-            };
-            reader.readAsDataURL(file);
-        }
-    });
+    fileInput.addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                // Busca la imagen de vista previa y le pone la foto cargada
+                const imgTag = document.querySelector('#admin img') || document.querySelector('.preview-container img') || document.querySelector('input[type="file"] ~ img');
+                if (imgTag) {
+                    imgTag.src = event.target.result;
+                }
+            };
+            reader.readAsDataURL(file);
+        }
+    });
 } 
 loadProducts();
 </script>   
 <div class="whatsapp-float">  
 <a href="https://wa.me/5492634506374?text=Hola,%20me%20gustaría%20más%20información" target="_blank" rel="noopener noreferrer" aria-label="Chat de WhatsApp">    
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" class="whatsapp-icon" width="32" height="32">      
-    <path fill="#25d366" d="M16 0C7.164 0 0 7.164 0 16c0 2.833.738 5.496 2.025 7.808L.545 31.455l7.85-2.055C10.742 30.776 13.31 31.5 16 31.5c8.836 0 16-7.164 16-16S24.836 0 16 0z"/>    
-    </svg>  
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" class="whatsapp-icon" width="32" height="32">      
+    <path fill="#25d366" d="M16 0C7.164 0 0 7.164 0 16c0 2.833.738 5.496 2.025 7.808L.545 31.455l7.85-2.055C10.742 30.776 13.31 31.5 16 31.5c8.836 0 16-7.164 16-16S24.836 0 16 0z"/>    
+    </svg>  
 </a>
 </div>   
 </body>
