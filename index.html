@@ -341,7 +341,24 @@ function prepareEdit(id) {
             document.getElementById('imagePreview').src = product.preview;
     }
   }   
-}  
+} 
+ const fileInput = document.querySelector('input[type="file"]');
+if (fileInput) {
+    fileInput.addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                // Busca la imagen de vista previa y le pone la foto cargada
+                const imgTag = document.querySelector('#admin img') || document.querySelector('.preview-container img') || document.querySelector('input[type="file"] ~ img');
+                if (imgTag) {
+                    imgTag.src = event.target.result;
+                }
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+} 
 loadProducts();
 </script>   
 <div class="whatsapp-float">  
