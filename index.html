@@ -336,7 +336,11 @@ function prepareEdit(id) {
         if(document.getElementById('fb')) document.getElementById('fb').value = product.fb || '';
         if(document.getElementById('ml')) document.getElementById('ml').value = product.ml || '';
         if(document.getElementById('detail')) document.getElementById('detail').value = product.detail || '';
+      // Agregá esto para la imagen:
+        if(product.preview && document.getElementById('imagePreview')) {
+            document.getElementById('imagePreview').src = product.preview;
     }
+  }   
 }  
 loadProducts();
 </script>   
