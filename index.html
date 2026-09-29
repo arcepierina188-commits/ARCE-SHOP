@@ -304,6 +304,18 @@ function renderizarProductos() {
         storeGrid.innerHTML = publicContent || '<p style="grid-column: 1/-1; text-align:center; padding: 20px;">No hay productos en esta categoría.</p>';
     }
 }
+document.getElementById('btnAdmin').onclick = function() {
+    const loginSec = document.getElementById('login');
+    if(loginSec) loginSec.style.display = 'flex';
+    const msg = document.getElementById('loginMsg');
+    if(msg) msg.innerText = '';
+    const adminSec = document.getElementById('admin');
+    if(adminSec) {
+        adminSec.classList.add('on');
+        adminSec.style.display = 'block';
+        adminSec.scrollIntoView({ behavior: 'smooth' });
+    }
+};
 loadProducts();
 </script>   
 <div class="whatsapp-float">  
