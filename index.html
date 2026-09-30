@@ -1,6 +1,32 @@
 <!doctype html>
 <html lang="es">
 <head>
+  <!-- PEGAR A PARTIR DE ACÁ -->
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyCElLtSnDC6IIALOaPCbmcBSxsKvRt_bpI",
+      authDomain: "arceshop-99865.firebaseapp.com",
+      projectId: "arceshop-99865",
+      storageBucket: "arceshop-99865.firebasestorage.app",
+      messagingSenderId: "202498685851",
+      appId: "1:202498685851:web:66cd1b2a4599fb8c813f3e",
+      measurementId: "G-P61NL74VKM"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+
+    db.enablePersistence({ synchronizeTabs: true }).catch((err) => {
+      console.log("Error al activar caché:", err.code);
+    });
+  </script>
+  <!-- HASTA ACÁ -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>AR SHOP</title>
