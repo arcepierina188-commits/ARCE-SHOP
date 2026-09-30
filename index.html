@@ -125,6 +125,16 @@ firebase.initializeApp(firebaseConfig);
 }
 const auth = firebase.auth();
 const db = firebase.firestore();
+ // --- AGREGAR DESDE AQUÍ ---
+db.enablePersistence({ synchronizeTabs: true })
+  .catch((err) => {
+    if (err.code == 'failed-precondition') {
+      console.log('Persistencia activa solo en una pestaña');
+    } else if (err.code == 'unimplemented') {
+      console.log('El navegador no soporta persistencia');
+    }
+  });
+// --- HASTA AQUÍ --- 
 window.showStore = function() {          
 document.getElementById('login').style.display = 'none';          
 const storeSec = document.getElementById('store');     
@@ -180,31 +190,34 @@ function clearForm() {    
   document.getElementById('preview').src = '';
 }
 // COMPRESIÓN DE IMÁGENES AL 60%
-  const fileInput = document.getElementById('file');
-  if (fileInput) {    
-    fileInput.addEventListener('change', function(e) {        
-      const file = e.target.files[0];        
-      if (file) {            
-        const reader = new FileReader();            
-        reader.onload = function(event) {                
-          const img = new Image();                
-          img.src = event.target.result;                
-          img.onload = function() {                    
-            const canvas = document.createElement('canvas');                    
-            const ctx = canvas.getContext('2d');                                        
-            const MAX_WIDTH = 400;                    
-            const scaleSize = MAX_WIDTH / img.width;                    
-            canvas.width = MAX_WIDTH;                    
-            canvas.height = img.height * scaleSize;
-                    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);                    
-            const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.6);                                        
-            document.getElementById('preview').src = compressedDataUrl;                
-          };            
-        };            
-        reader.readAsDataURL(file);        
-      }    
-    });
-  }
+ const fileInput = document.getElementById('file');
+if (fileInput) {
+  fileInput.addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = function(event) {
+        const img = new Image();
+        img.src = event.target.result;
+        img.onload = function() {
+          const canvas = document.createElement('canvas');
+          const ctx = canvas.getContext('2d');
+          
+          const MAX_WIDTH = 320; // Reduce resolución
+          const scaleSize = MAX_WIDTH / img.width;
+          canvas.width = MAX_WIDTH;
+          canvas.height = img.height * scaleSize;
+          
+          ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+          
+          // Compresión al 45%
+          document.getElementById('preview').src = canvas.toDataURL('image/jpeg', 0.45);
+        };
+      };
+      reader.readAsDataURL(file);
+    }
+  });
+} 
 async function saveProduct() {     
   const editId = document.getElementById('editid').value;     
   const name = document.getElementById('name').value;    
