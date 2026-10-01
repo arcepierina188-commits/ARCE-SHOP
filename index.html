@@ -136,9 +136,13 @@ const firebaseConfig = {
 if (!firebase.apps.length) {     
   firebase.initializeApp(firebaseConfig);
 }
-
 const auth = firebase.auth();
+
+// Configuración moderna de caché en Firebase v10+
 const db = firebase.firestore();
+db.settings({
+  cacheSizeBytes: firebase.firestore.CACHE_SIZE_UNLIMITED
+});
 
 // Persistencia en caché sin deprecated warnings
 db.enablePersistence().catch((err) => {
